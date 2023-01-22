@@ -1,0 +1,43 @@
+version: "3"
+services:
+  data-generator:
+    container_name: data-generator
+    build:
+      context: .
+      dockerfile: Dockerfile-data-generator
+    environment:
+      USER: ${USER}
+      PASSWORD: ${PASSWORD}
+      HOST: ${HOST}
+      PORT: ${PORT}
+      DATABASE: ${DATABASE}
+    networks:
+      - default
+      - mlops_network
+    depends_on:
+      postgres-server:
+        condition: service_healthy
+    command: ["postgres-server"]
+
+  postgres-server:
+    image: postgres:14.0
+    container_name: postgres-server
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${USER}
+      POSTGRES_PASSWORD: ${PASSWORD}
+      POSTGRES_DB: ${DATABASE}
+    networks:
+      - default
+      - mlops_network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-U", "myuser", "-d", "mydatabase"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  mlops_network:
+    driver: bridge

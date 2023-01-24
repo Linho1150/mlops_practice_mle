@@ -12,7 +12,7 @@ Docker를 실행하지 않아서 발생하는 오류였다.
 원인는 `docker-compose config`를 통해 알 수 있었는데 환경변수 USER가 myuser가 아닌 컴퓨터 이름으로 인식되어있었다.
 따라서 .env는 리눅스 환경변수로 사용될만한 내용은 제외해야한다.
 
-# Moudel을 찾지 못하는 문제
+# Module을 찾지 못하는 문제
 
 > data-generator | ModuleNotFoundError: No module named 'database.mlops_query_manager'
 
